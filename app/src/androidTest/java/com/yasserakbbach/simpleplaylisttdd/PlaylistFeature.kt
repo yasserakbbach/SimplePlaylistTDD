@@ -34,13 +34,13 @@ class PlaylistFeature {
 
     @Test
     fun displayListOfPlaylists() {
-        assertRecyclerViewItemCount(R.id.recylerViewPlaylists, 10)
+        assertRecyclerViewItemCount(R.id.recyclerViewPlaylists, 10)
         onView(
             allOf(
                 withId(R.id.textPlaylistName),
                 isDescendantOfA(
                     nthChildOf(
-                        withId(R.id.recylerViewPlaylists),
+                        withId(R.id.recyclerViewPlaylists),
                         0,
                     )
                 )
@@ -53,7 +53,7 @@ class PlaylistFeature {
                 withId(R.id.textPlaylistCategory),
                 isDescendantOfA(
                     nthChildOf(
-                        withId(R.id.recylerViewPlaylists),
+                        withId(R.id.recyclerViewPlaylists),
                         0,
                     )
                 )
@@ -66,7 +66,7 @@ class PlaylistFeature {
                 withId(R.id.imagePlaylist),
                 isDescendantOfA(
                     nthChildOf(
-                        withId(R.id.recylerViewPlaylists),
+                        withId(R.id.recyclerViewPlaylists),
                         0,
                     )
                 )
