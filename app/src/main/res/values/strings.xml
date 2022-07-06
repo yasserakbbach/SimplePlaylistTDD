@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">SimplePlaylistTDD</string>
+    <string name="playlists">Playlists</string>
 </resources>
