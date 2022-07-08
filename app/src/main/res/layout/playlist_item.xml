@@ -27,7 +27,7 @@
         tools:text="Playlist name" />
 
     <TextView
-        android:id="@+id/content"
+        android:id="@+id/textPlaylistCategory"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/text_margin"

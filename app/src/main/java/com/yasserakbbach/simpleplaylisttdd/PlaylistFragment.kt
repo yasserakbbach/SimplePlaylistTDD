@@ -2,34 +2,48 @@ package com.yasserakbbach.simpleplaylisttdd
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.yasserakbbach.simpleplaylisttdd.placeholder.PlaceholderContent
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.yasserakbbach.simpleplaylisttdd.databinding.FragmentPlaylistBinding
 
 class PlaylistFragment : Fragment() {
 
-    private var columnCount = 1
+    private var binding: FragmentPlaylistBinding? = null
+    private val playlistCallback: PlaylistRecyclerViewAdapter.PlaylistViewHolder.OnItemClickListener = object :
+        PlaylistRecyclerViewAdapter.PlaylistViewHolder.OnItemClickListener {
+        override fun onPlaylistClick(id: String) {
+            TODO("Not yet implemented")
+        }
+    }
+    private val playlistAdapter: PlaylistRecyclerViewAdapter by lazy {
+        PlaylistRecyclerViewAdapter(playlistCallback)
+    }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.fragment_playlist, container, false)
+    ): View = FragmentPlaylistBinding.inflate(layoutInflater, container, false)
+        .also { binding = it }
+        .root
 
-        if (view is RecyclerView) {
-            with(view) {
-                layoutManager = when {
-                    columnCount <= 1 -> LinearLayoutManager(context)
-                    else -> GridLayoutManager(context, columnCount)
-                }
-                adapter = PlaylistRecyclerViewAdapter(PlaceholderContent.ITEMS)
-            }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding?.initPlaylistRV()
+    }
+
+    private fun FragmentPlaylistBinding.initPlaylistRV() {
+        recyclerViewPlaylists.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = playlistAdapter
         }
-        return view
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        binding = null
     }
 
     companion object {

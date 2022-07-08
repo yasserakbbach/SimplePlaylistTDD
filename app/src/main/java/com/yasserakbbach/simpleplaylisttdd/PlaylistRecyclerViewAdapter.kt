@@ -3,40 +3,57 @@ package com.yasserakbbach.simpleplaylisttdd
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import com.yasserakbbach.simpleplaylisttdd.databinding.PlaylistItemBinding
 
 class PlaylistRecyclerViewAdapter(
-    private val values: List<Playlist>
-) : RecyclerView.Adapter<PlaylistRecyclerViewAdapter.ViewHolder>() {
+    private val listener: PlaylistViewHolder.OnItemClickListener,
+) : ListAdapter<Playlist, PlaylistRecyclerViewAdapter.PlaylistViewHolder>(diffCallback) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-
-        return ViewHolder(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaylistViewHolder =
+        PlaylistViewHolder(
             PlaylistItemBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
-                false
-            )
+                false,
+            ),
+            listener
         )
 
+    override fun onBindViewHolder(holder: PlaylistViewHolder, position: Int) {
+        getItem(position)?.let { holder.bind(it) }
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = values[position]
-        holder.idView.text = item.id
-        holder.contentView.text = item.content
-    }
-
-    override fun getItemCount(): Int = values.size
-
-    inner class ViewHolder(binding: PlaylistItemBinding) : RecyclerView.ViewHolder(binding.root) {
-        val idView: TextView = binding.itemNumber
-        val contentView: TextView = binding.content
-
-        override fun toString(): String {
-            return super.toString() + " '" + contentView.text + "'"
+    class PlaylistViewHolder(
+        private val binding: PlaylistItemBinding,
+        private val listener: OnItemClickListener,
+    ) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(playlist: Playlist) {
+            binding.apply {
+                imagePlaylist.setImageResource(playlist.image)
+                textPlaylistName.text = playlist.name
+                textPlaylistCategory.text = playlist.category
+                root.setOnClickListener {
+                    listener.onPlaylistClick(playlist.id)
+                }
+            }
         }
+
+        interface OnItemClickListener {
+            fun onPlaylistClick(id: String)
+        }
+    }
+
+    private companion object {
+        val diffCallback: DiffUtil.ItemCallback<Playlist> =
+            object : DiffUtil.ItemCallback<Playlist>() {
+                override fun areItemsTheSame(oldItem: Playlist, newItem: Playlist): Boolean =
+                    oldItem.id == newItem.id
+
+                override fun areContentsTheSame(oldItem: Playlist, newItem: Playlist): Boolean =
+                    oldItem == newItem
+            }
     }
 
 }
